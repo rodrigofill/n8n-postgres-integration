@@ -10,7 +10,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ~/.n8n_postgres_data:/var/lib/postgresql/data
+      - ~/.n8n_postgres_data_persistance:/var/lib/postgresql/data
     networks:
       - n8n_network
 
