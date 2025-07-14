@@ -1,0 +1,60 @@
+version: "3.8"
+services:
+  db:
+    container_name: postgres
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=n8n
+      - POSTGRES_PASSWORD=n8npass
+      - POSTGRES_DB=n8ndb
+    ports:
+      - "5432:5432"
+    volumes:
+      - ~/.n8n_postgres_data:/var/lib/postgresql/data
+    networks:
+      - n8n_network
+
+  n8n:
+    image: n8nio/n8n
+    restart: always
+    ports:
+      - "5678:5678"
+    environment:
+      DB_TYPE: postgresdb
+      DB_POSTGRESDB_HOST: db
+      DB_POSTGRESDB_PORT: 5432
+      DB_POSTGRESDB_DATABASE: n8ndb
+      DB_POSTGRESDB_USER: n8n
+      DB_POSTGRESDB_PASSWORD: n8npass
+      N8N_BASIC_AUTH_ACTIVE: false
+      N8N_USER_MANAGEMENT_DISABLED: true
+    depends_on:
+      - db
+    networks:
+      - n8n_network
+
+  migrate:
+    build: .
+    depends_on:
+      - db
+    command: alembic upgrade head
+    networks:
+      - n8n_network
+
+  # seed:
+  #   build: .
+  #   depends_on:
+  #     migrate:
+  #       condition: service_completed_successfully
+  #   environment:
+  #     PYTHONPATH: /app
+  #   command: python src/seed/seed_data.py
+  #   networks:
+  #     - n8n_network
+
+volumes:
+  postgres_data:
+
+networks:
+  n8n_network:
+        

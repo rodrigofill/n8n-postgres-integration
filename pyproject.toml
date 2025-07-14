@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "n8n-postgres-integration"
+version = "0.1.0"
+description = ""
+authors = ["rodrigo-note <fill1903@gmail.com>"]
+packages = [
+  { include = "src" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+SQLAlchemy = "^2.0.41"
+dotenv = "^0.9.9"
+alembic = "^1.16.4"
+python-ulid = "^3.0.0"
+psycopg2-binary = "^2.9.10"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
